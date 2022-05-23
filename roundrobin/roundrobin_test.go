@@ -32,3 +32,22 @@ func TestRoundRobin_Execute(t *testing.T) {
 	time.Sleep(time.Second * 10)
 	rr.Quit()
 }
+
+func TestSarasa(t *testing.T) {
+	per := Path{
+		1: 1,
+		2: 1,
+		3: 4,
+	}
+	fmt.Println(per.Distance())
+}
+
+type Path map[int]int
+
+func (p Path) Distance() int {
+	res := 0
+	for k, _ := range p {
+		res += k
+	}
+	return res
+}
