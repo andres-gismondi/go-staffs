@@ -1,6 +1,7 @@
 package balanced_test
 
 import (
+	"fmt"
 	"testing"
 
 	"go-staffs/tree/balanced"
@@ -13,4 +14,8 @@ func TestTree(t *testing.T) {
 	tr.Add(9)
 
 	tr.Print()
+}
+
+func Test_testMaster(t *testing.T) {
+	fmt.Println("test commit on branch")
 }
