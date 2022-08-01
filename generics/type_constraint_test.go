@@ -33,3 +33,15 @@ func SumNumbers[K comparable, V Number](m map[K]V) V {
 	}
 	return s
 }
+
+func TestArray(t *testing.T) {
+	sarasa := []int{1, 2, 3, 4, 5, 6}
+	hh := sarasa[:1]
+	fmt.Println(hh)
+	hh = sarasa[1:]
+	fmt.Println(hh)
+	hh = sarasa[1:1]
+	fmt.Println(hh)
+	hh = sarasa[2:]
+	fmt.Println(hh)
+}

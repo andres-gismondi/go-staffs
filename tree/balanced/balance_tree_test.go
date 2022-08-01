@@ -19,3 +19,5 @@ func TestTree(t *testing.T) {
 func Test_testMaster(t *testing.T) {
 	fmt.Println("test commit on branch")
 }
+
+type fmap[A, B, C any] func(f func(B) C, g func(A) (B, error)) func(A) (C, error)
