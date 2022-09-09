@@ -1,4 +1,4 @@
-package problems
+package practices
 
 import (
 	"fmt"

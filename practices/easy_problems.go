@@ -27,7 +27,6 @@ func SortNumbers(number []int) []int {
 }
 
 func SortSlice(S []int64) []int64 {
-	// sort using bubblesort, comparing each pairs of numbers and ensuring that left is lower than right
 	for i := len(S); i > 0; i-- {
 		for j := 1; j < i; j++ {
 			if S[j-1] > S[j] {

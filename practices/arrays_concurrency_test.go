@@ -1,10 +1,10 @@
-package problems_test
+package practices_test
 
 import (
 	"testing"
 	"time"
 
-	"go-staffs/problems"
+	"go-staffs/practices"
 )
 
 func TestProblems_MergeArraysWithLocalFunction(t *testing.T) {
@@ -15,7 +15,7 @@ func TestProblems_MergeArraysWithLocalFunction(t *testing.T) {
 		{10, 15, 13, 1},
 	}
 
-	problems.MergeArrays1(a)
+	practices.MergeArrays1(a)
 
 	time.Sleep(time.Second * 2)
 }
@@ -28,7 +28,7 @@ func TestProblems_MergeArraysWithExternalFunction(t *testing.T) {
 		{10, 15, 13, 1},
 	}
 
-	problems.MergeArrays2(a)
+	practices.MergeArrays2(a)
 
 	time.Sleep(time.Second * 2)
 }
