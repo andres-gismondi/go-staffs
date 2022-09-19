@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"go-staffs/roundrobin"
+	"go-staffs/concurrency/roundrobin"
 )
 
 func TestRoundRobin_Execute(t *testing.T) {

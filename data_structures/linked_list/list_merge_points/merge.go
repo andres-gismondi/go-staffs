@@ -3,7 +3,7 @@ package list_merge_points
 import (
 	"fmt"
 
-	"go-staffs/linked_list/list"
+	"go-staffs/data_structures/linked_list/list"
 )
 
 type Merge struct {

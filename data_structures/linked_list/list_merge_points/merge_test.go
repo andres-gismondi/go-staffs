@@ -3,8 +3,8 @@ package list_merge_points_test
 import (
 	"testing"
 
-	"go-staffs/linked_list/list"
-	"go-staffs/linked_list/list_merge_points"
+	"go-staffs/data_structures/linked_list/list"
+	"go-staffs/data_structures/linked_list/list_merge_points"
 )
 
 func TestMerge(t *testing.T) {

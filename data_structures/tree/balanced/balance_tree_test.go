@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"go-staffs/tree/balanced"
+	"go-staffs/data_structures/tree/balanced"
 )
 
 func TestTree(t *testing.T) {

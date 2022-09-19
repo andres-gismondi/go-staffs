@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"go-staffs/fanout"
+	"go-staffs/concurrency/fanout"
 )
 
 func TestFanOut(t *testing.T) {

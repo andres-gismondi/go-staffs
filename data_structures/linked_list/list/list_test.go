@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"go-staffs/linked_list/list"
+	"go-staffs/data_structures/linked_list/list"
 )
 
 func TestList(t *testing.T) {

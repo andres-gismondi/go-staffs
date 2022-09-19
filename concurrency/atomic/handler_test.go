@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"go-staffs/atomic"
+	"go-staffs/concurrency/atomic"
 	"go-staffs/market"
 )
 
