@@ -71,3 +71,13 @@ func TestSliceInit(t *testing.T) {
 	var s2 []int
 	fmt.Println(s2)
 }
+
+func TestContinue(t *testing.T) {
+	w := [10]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	for _, num := range w {
+		if num == 2 || num == 3 {
+			continue
+		}
+		fmt.Println(num)
+	}
+}

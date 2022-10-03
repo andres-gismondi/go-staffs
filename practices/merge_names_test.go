@@ -1,6 +1,7 @@
 package practices_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,4 +18,15 @@ func TestMergeNames_success(t *testing.T) {
 	got := merge.UniqueNames(none, ntwo)
 
 	assert.Equal(t, want, got)
+}
+
+func Uno(x, y int) int {
+	if x == 0 {
+		return y
+	}
+	a := Uno(x-1, x+y)
+	return a
+}
+func TestUno(t *testing.T) {
+	fmt.Println(Uno(5, 2))
 }

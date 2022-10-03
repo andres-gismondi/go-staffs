@@ -20,30 +20,33 @@ func (n *Node) AddNeighbour(node Node) {
 type Queue []Node
 
 func (q *Queue) Add(n Node) {
-	if exist := q.Contains(n); !exist {
+	if exist := q.contains(n); !exist {
 		*q = append(*q, n)
 	}
 }
-func (q *Queue) Contains(n Node) bool {
-	for _, nn := range *q {
-		if nn.ID == n.ID {
-			return true
-		}
-	}
-	return false
-}
+
 func (q *Queue) First() Node {
-	last := (*q)[0:]
+	first := (*q)[0:]
 	if len(*q) > 1 {
 		*q = (*q)[1:len(*q)]
 	} else {
 		*q = Queue{}
 	}
-	return last[0]
+	return first[0]
 }
+
 func (q *Queue) Empty() bool {
 	if len(*q) == 0 {
 		return true
+	}
+	return false
+}
+
+func (q *Queue) contains(n Node) bool {
+	for _, nn := range *q {
+		if nn.ID == n.ID {
+			return true
+		}
 	}
 	return false
 }

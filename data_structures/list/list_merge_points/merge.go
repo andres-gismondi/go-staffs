@@ -3,20 +3,20 @@ package list_merge_points
 import (
 	"fmt"
 
-	"go-staffs/data_structures/linked_list/list"
+	"go-staffs/data_structures/list/linked"
 )
 
 type Merge struct {
-	First  *list.List
-	Second *list.List
+	First  *linked.List
+	Second *linked.List
 }
 
-func (m Merge) Merge() {
+func (m Merge) Merge() Info {
 	exit := false
 	sndHead := m.Second
 	for !exit {
 		if m.First.Head == nil {
-			break
+			return mergeInfo("asdsa")
 		}
 		for {
 			if m.Second.Head == nil {
@@ -32,4 +32,16 @@ func (m Merge) Merge() {
 		m.First.Next()
 		m.Second = sndHead
 	}
+
+	return nil
+}
+
+type Info interface {
+	Message() string
+}
+
+type mergeInfo string
+
+func (mi mergeInfo) Message() string {
+	return string(mi)
 }

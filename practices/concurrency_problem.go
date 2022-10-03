@@ -29,11 +29,15 @@ const content = `
 func FindTags(s string) []string {
 	lines := strings.Split(s, "\n")
 	tags := make(chan string)
-	
+
 	var wg sync.WaitGroup
 	for _, line := range lines {
+		line := line
 		wg.Add(1)
-		go findTags(line, tags, &wg)
+		go func() {
+			defer wg.Done()
+			findTags(line, tags)
+		}()
 	}
 
 	go func() {
@@ -51,9 +55,7 @@ func FindTags(s string) []string {
 
 var tagName = regexp.MustCompile(`<([a-zA-Z0-9_\-]+)\s?.*>`)
 
-func findTags(s string, tags chan string, wg *sync.WaitGroup) {
-	defer wg.Done()
-
+func findTags(s string, tags chan string) {
 	matches := tagName.FindAllStringSubmatch(s, -1)
 	for _, match := range matches {
 		if len(match) > 0 {
