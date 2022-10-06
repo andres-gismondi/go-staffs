@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"go-staffs/parser"
 )
 
@@ -43,12 +44,27 @@ func TestMindera_IsPaxos_NotMindera(t *testing.T) {
 		},
 	}
 
-	tags := []string{"y", "z", "x", "0", "1", "2"}
-	res := parser.MainTrd(trades, tags)
+	got := parser.MainTrd(trades, "x")
+	fmt.Printf("Trades: %v", got)
+	assert.Equal(t, 3, len(got))
 
-	// iterate over every key to print the result
-	for k, v := range res {
-		fmt.Printf("Key: %v; Trades: %v", k, v)
-		fmt.Println()
-	}
+	fmt.Println()
+	got = parser.MainTrd(trades, "1")
+	fmt.Printf("Trades: %v", got)
+	assert.Equal(t, 3, len(got))
+
+	fmt.Println()
+	got = parser.MainTrd(trades, "y")
+	fmt.Printf("Trades: %v", got)
+	assert.Equal(t, 3, len(got))
+
+	fmt.Println()
+	got = parser.MainTrd(trades, "0")
+	fmt.Printf("Trades: %v", got)
+	assert.Equal(t, 3, len(got))
+
+	fmt.Println()
+	got = parser.MainTrd(trades, "z")
+	fmt.Printf("Trades: %v", got)
+	assert.Equal(t, 1, len(got))
 }

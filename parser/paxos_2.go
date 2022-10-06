@@ -1,12 +1,11 @@
 package parser
 
 import (
-	"reflect"
 	"strings"
 )
 
 // Money approach is used in order to not use float64, since this kind of operations
-// generate bugs in floating points. So the base money is a integer
+// generate bugs in floating points. So the base money is an integer
 type Money int64
 
 const (
@@ -16,23 +15,23 @@ const (
 
 // NetPos is the net position
 type NetPos struct {
-	Gold float32
+	Gold float64
 	USD  Money
 }
 
 // AddGold add gold quantity and also the operation to subtract usd
-func (np *NetPos) AddGold(q float32, total int64) {
+func (np *NetPos) AddGold(q float64, total int64) {
 	np.Gold += q
 
-	aux := float32(GOLD) * q
+	aux := float64(GOLD) * q
 	np.USD = np.USD - Money(aux)
 }
 
 // SellGold subtract gold from net position and also sum usd
-func (np *NetPos) SellGold(q float32, total int64) {
+func (np *NetPos) SellGold(q float64, total int64) {
 	np.Gold -= q
 
-	aux := float32(GOLD) * q
+	aux := float64(GOLD) * q
 	np.USD = np.USD + Money(aux)
 }
 
@@ -53,7 +52,7 @@ type Trd struct {
 	ID     string
 	Type   string
 	USD    int64
-	Gold   float32
+	Gold   float64
 	OurT   string
 	TheirT string
 }
@@ -77,13 +76,63 @@ func GetNPos(trades []Trd) NetPos {
 
 // Node represent a node in a data struct with a generic value
 type Node struct {
-	Val   interface{}
+	Val   Trd
 	Nodes []*Node
 }
 
 // AddNode add neighborhoods to the node
 func (n *Node) AddNode(node *Node) {
+	if n.contains(node) {
+		return
+	}
 	n.Nodes = append(n.Nodes, node)
+}
+func (n *Node) contains(node *Node) bool {
+	for _, n := range n.Nodes {
+		if n == node {
+			return true
+		}
+	}
+	return false
+}
+
+type Graph struct {
+	Nodes []*Node
+}
+
+func (g *Graph) AddNode(val Trd) {
+	node := &Node{Val: val}
+	if len(g.Nodes) == 0 {
+		g.Nodes = append(g.Nodes, node)
+		return
+	}
+
+	for _, n := range g.Nodes {
+		nde := n
+		if nde.Val.OurT == val.OurT {
+			nde.AddNode(node)
+			node.AddNode(nde)
+		}
+		if nde.Val.TheirT == val.TheirT {
+			nde.AddNode(node)
+			node.AddNode(nde)
+		}
+	}
+	g.Nodes = append(g.Nodes, node)
+}
+
+// GetNodeByTag returns a Node containing a specific tag to
+// could run through the graph
+func (g *Graph) GetNodeByTag(tag string) *Node {
+	for _, n := range g.Nodes {
+		if n.Val.OurT == tag {
+			return n
+		}
+		if n.Val.TheirT == tag {
+			return n
+		}
+	}
+	return nil
 }
 
 // visits contains all nodes who were visited by an iteration
@@ -101,27 +150,19 @@ func (v *visits) WasVisited(node *Node) bool {
 	return false
 }
 
-type Tags map[string]Trd
-
-func (t Tags) AddTrd(tag string, trd Trd) {
-	t[tag] = trd
-}
-
-// DFS is Depths First Search to iterate recursive through a graph
-func DFS(tag *Node, m map[string][]Trd) {
+// DFS is Depths First Search to iterate recursively through a graph
+func DFS(node *Node) []Trd {
 	var trades []Trd
-	trades = dfs(tag, visits{}, trades)
+	trades = dfs(node, visits{}, trades)
 
-	m[tag.Val.(string)] = trades
+	return trades
 }
 func dfs(n *Node, visits visits, trades []Trd) []Trd {
 	if visits.WasVisited(n) {
 		return trades
 	}
 
-	if t := reflect.TypeOf(n.Val); t.Kind() == reflect.Struct {
-		trades = append(trades, n.Val.(Trd))
-	}
+	trades = append(trades, n.Val)
 
 	visits.AddVisitor(n)
 	for _, node := range n.Nodes {
@@ -132,39 +173,17 @@ func dfs(n *Node, visits visits, trades []Trd) []Trd {
 
 // MainTrd receive trades and tags and create a graph
 // Later call DFS for every tag to create a map
-func MainTrd(trades []Trd, tags []string) map[string][]Trd {
+func MainTrd(trades []Trd, tag string) []Trd {
 	// here we can create the graph with trades and tags and their connections
 	// everything is a node
 
-	// create nodes from trades
-	var trds []*Node
+	graph := Graph{Nodes: make([]*Node, 0)}
+
 	for _, trade := range trades {
-		trds = append(trds, &Node{Val: trade, Nodes: make([]*Node, 0)})
+		graph.AddNode(trade)
 	}
 
-	// create nodes from tags
-	var tgs []*Node
-	for _, tag := range tags {
-		tgs = append(tgs, &Node{Val: tag, Nodes: make([]*Node, 0)})
-	}
+	node := graph.GetNodeByTag(tag)
 
-	// connect trades with tags
-	for _, trade := range trds {
-		t := trade.Val.(Trd)
-		for _, tag := range tgs {
-			if t.OurT == tag.Val.(string) || t.TheirT == tag.Val.(string) {
-				trade.AddNode(tag)
-				tag.AddNode(trade)
-			}
-		}
-	}
-
-	// create map response
-	//add for every tag key it's trades
-	res := make(map[string][]Trd)
-	for _, tag := range tgs {
-		DFS(tag, res)
-	}
-
-	return res
+	return DFS(node)
 }
